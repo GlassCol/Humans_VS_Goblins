@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src.SettingsController">
+   <children>
+      <Slider id="board_size_slider" fx:id="board_size_slider" blockIncrement="1.0" layoutX="225.0" layoutY="78.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Slider id="human_count_slider" fx:id="num_of_humans_slider" blockIncrement="1.0" layoutX="227.0" layoutY="162.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Slider id="goblin_count_slider" fx:id="num_of_goblins_slider" blockIncrement="1.0" layoutX="227.0" layoutY="262.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefWidth="150.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Button id="back_button" fx:id="back_button" layoutX="263.0" layoutY="335.0" mnemonicParsing="false" onAction="#backToMain" text="Main Menu" />
+      <Label id="game_size_label" layoutX="272.0" layoutY="61.0" text="Game Size" />
+      <Label id="humans_label" layoutX="248.0" layoutY="138.0" text="Number of Humans" />
+      <Label id="goblins_label" layoutX="252.0" layoutY="233.0" text="Number of Goblins" />
+   </children>
+</AnchorPane>
