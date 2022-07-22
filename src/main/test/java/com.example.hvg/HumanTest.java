@@ -62,4 +62,11 @@ class HumanTest {
         human.attack(goblin);
         assertTrue(0 >= goblin.getCurrentHealth());
     }
+    @Test
+    void getStartingHpTest(){
+        Goblin goblin = new Goblin(5, "testGob", "Green", 5, 9, 9);
+        Human human = new Human(5, "testHuman", "Pale", 5, 0 , 0);
+        goblin.attack(human);
+        assertTrue(5 >= human.getStartingHealth());
+    }
 }
