@@ -8,5 +8,9 @@ public class IronSword implements Sword {
     public int getStrength() {
         return this.strength;
     }
+    @Override
+    public String toString() {
+        return "Iron Sword: +3 Strength";
+    }
 }
 

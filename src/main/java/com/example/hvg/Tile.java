@@ -86,7 +86,7 @@ public class Tile {
                 if (!humanoids.get(0).isHuman())
                     if (humanoids.get(0).shouldDrop()) {
                         Equipment item = humanoids.get(0).drops();
-                        result += item.toString() + " has dropped";
+                        result += item.toString() + " has dropped\n";
                         humanoids.get(1).pickUp(item);
                     }
             }

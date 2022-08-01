@@ -9,8 +9,8 @@ public class WoodenSword implements Sword {
     }
 
     @Override
-    public boolean isSword() {
-        return true;
+    public String toString() {
+        return "Wooden Sword: +1 Strength";
     }
 
 }
