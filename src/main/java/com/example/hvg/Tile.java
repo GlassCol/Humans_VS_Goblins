@@ -27,6 +27,32 @@ public class Tile {
         return humanoids.size() > 0;
     }
 
+    /**
+     * Checks whether a human is in this tile
+     * @return boolean : true if there is a human in this tile
+     */
+    public boolean hasHuman(){
+        if(humanoids.size() == 0) return false;
+        for (Humanoid humanoid : humanoids) {
+            if (humanoid.isHuman())
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether a human is in this tile
+     * @return boolean : true if there is a human in this tile
+     */
+    public boolean hasGoblin(){
+        if(humanoids.size() == 0) return false;
+        for (Humanoid humanoid : humanoids) {
+            if (!humanoid.isHuman())
+                return true;
+        }
+        return false;
+    }
+
     public boolean hasCombat() {
         return humanoids.size() > 1;
     }

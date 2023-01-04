@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameController {
     private Tile currentTile;
@@ -40,6 +42,9 @@ public class GameController {
                     findTile(actionEvent).getButton().setText(findTile(actionEvent).toString());
                     tiles[currentTile.getXCoordinate()][currentTile.getYCoordinate()].removeHumanoid(currentTile.getHuman());
                     tiles[currentTile.getXCoordinate()][currentTile.getYCoordinate()].getButton().setText("   ");
+                    for (Humanoid goblin : humanoidArrayList.get(1)) {
+                        moveAi(goblin);
+                    }
                     doCombat();
                 } else {
                     text_area.setText("Invalid Move" + "\n\n" + text_area.getText());
@@ -56,7 +61,8 @@ public class GameController {
      */
     @FXML
     public void initialize() {
-        humanoidArrayList = initializer.initializeHumanoids(settings.getNumberOfHumans(), settings.getNumberOfGoblins(), settings.getBoardSize());
+        humanoidArrayList = initializer.initializeHumanoids(settings.getNumberOfHumans(),
+                settings.getNumberOfGoblins(), settings.getBoardSize());
         tiles = initializer.initializeGameBoard(settings.getBoardSize());
         initializer.initialPlacement(tiles, humanoidArrayList);
         for (int i = 0; i < settings.getBoardSize(); i++) {
@@ -127,8 +133,11 @@ public class GameController {
         if (movingTile.getYCoordinate() - currentTile.getYCoordinate() > 1) return false;
         if (movingTile.getYCoordinate() - currentTile.getYCoordinate() < -1) return false;
         if (movingTile.hasHumanoid()) {
-            // you need to check both of the possible indexes for humans
-            if (movingTile.getHumanoids().get(0).isHuman()) return false;
+            if (currentTile.hasHuman()) {
+                if (movingTile.getHumanoids().get(0).isHuman()) return false;
+            } else {
+                if (!movingTile.getHumanoids().get(0).isHuman()) return false;
+            }
             return !movingTile.getHumanoids().get(movingTile.getHumanoids().size() - 1).isHuman();
         }
         return true;
@@ -155,6 +164,76 @@ public class GameController {
         }
         if (humanoidArrayList.get(0).size() == 0 || humanoidArrayList.get(1).size() == 0)
             text_area.setText("GAME OVER" + "\n\n" + text_area.getText());
+    }
+
+    /**
+     * Moves all Humanoids Passed to it
+     * then resets currentTile to null
+     * @param humanoids : List of Humanoids to move
+     */
+    public void moveHumanoids(ArrayList<Humanoid> humanoids){
+        for (Humanoid humanoid :humanoids) {
+            moveAi(humanoid);
+        }
+        currentTile = null;
+    }
+
+    /**
+     * Moves the humanoid passed in a random valid direction
+     * or does nothing if no valid moves are found in 8 attempts
+     * @param humanoid : the humanoid being moved
+     */
+    public void moveAi(Humanoid humanoid) {
+        boolean foundMove = false;
+        currentTile = tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()];
+        int attempts = 0;
+        //returns without going in to the loop if the humanoid is in combat
+        if(currentTile.hasCombat()) return;
+        while (foundMove == false) {
+            int x = humanoid.getXCoordinate();
+            int y = humanoid.getYCoordinate();
+            int move = new Random().nextInt(8);
+
+            switch (move) {
+                case 0:
+                    x++;
+                    y++;
+                    break;
+                case 1:
+                    x++;
+                    break;
+                case 2:
+                    x++;
+                    y--;
+                    break;
+                case 3:
+                    y++;
+                    break;
+                case 4:
+                    y--;
+                    break;
+                case 5:
+                    x--;
+                    y++;
+                    break;
+                case 6:
+                    x--;
+                    break;
+                case 7:
+                    x--;
+                    y--;
+                    break;
+            }
+            attempts++;
+            if (isValidMove(tiles[x][y])) {
+                foundMove = true;
+                tiles[x][y].placeHumanoid(humanoid);
+                tiles[x][y].getButton().setText(tiles[x][y].toString());
+                tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()].removeHumanoid(humanoid);
+                tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()].getButton().setText("   ");
+            }
+            if (attempts == 8) foundMove = true;
+        }
     }
 
     /**
