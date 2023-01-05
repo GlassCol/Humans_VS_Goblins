@@ -12,6 +12,7 @@ public class Settings {
     private int boardSize = getDEFAULT_SIZE();
     private int numberOfHumans = getDEFAULT_NUMBER();
     private int numberOfGoblins = getDEFAULT_NUMBER();
+    private boolean aiGame = false;
 
     private Settings() {
     }
@@ -51,4 +52,8 @@ public class Settings {
     public void setNumberOfGoblins(int numberOfGoblins) {
         this.numberOfGoblins = numberOfGoblins;
     }
+
+    public boolean isAiGame() {return aiGame;}
+
+    public void setAiGame(boolean aiGame) {this.aiGame = aiGame;}
 }

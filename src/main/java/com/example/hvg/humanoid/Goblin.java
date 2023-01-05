@@ -87,6 +87,16 @@ public class Goblin implements Humanoid {
     }
 
     @Override
+    public void setXCoordinate(int x) {
+        this.xCoordinate = x;
+    }
+
+    @Override
+    public void setYCoordinate(int y) {
+        this.yCoordinate = y;
+    }
+
+    @Override
     public int getCurrentHealth() {
         return health;
     }

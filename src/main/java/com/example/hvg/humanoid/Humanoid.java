@@ -95,4 +95,7 @@ public interface Humanoid {
      */
     default void pickUp(Equipment drop) {}
 
+    void setXCoordinate(int x);
+
+    void setYCoordinate(int y);
 }

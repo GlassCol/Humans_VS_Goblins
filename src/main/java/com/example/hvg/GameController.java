@@ -42,9 +42,7 @@ public class GameController {
                     findTile(actionEvent).getButton().setText(findTile(actionEvent).toString());
                     tiles[currentTile.getXCoordinate()][currentTile.getYCoordinate()].removeHumanoid(currentTile.getHuman());
                     tiles[currentTile.getXCoordinate()][currentTile.getYCoordinate()].getButton().setText("   ");
-                    for (Humanoid goblin : humanoidArrayList.get(1)) {
-                        moveAi(goblin);
-                    }
+                        moveAi(humanoidArrayList.get(1).get(new Random().nextInt(humanoidArrayList.get(1).size() - 1)));
                     doCombat();
                 } else {
                     text_area.setText("Invalid Move" + "\n\n" + text_area.getText());
@@ -53,6 +51,17 @@ public class GameController {
             }
         }
     };
+
+    public void handleStartClick() {
+        while(humanoidArrayList.size() > 1) {
+           for (ArrayList<Humanoid> humanoidArrayList : humanoidArrayList) {
+               for (Humanoid humanoid : humanoidArrayList) {
+                   moveAi(humanoid);
+               }
+           }
+              doCombat();
+        }
+    }
     @FXML
     private GridPane grid_pane;
 
@@ -225,12 +234,16 @@ public class GameController {
                     break;
             }
             attempts++;
+            if(x >= 0 && x < settings.getBoardSize() - 1 && y >= 0 && y < settings.getBoardSize() - 1){
             if (isValidMove(tiles[x][y])) {
                 foundMove = true;
                 tiles[x][y].placeHumanoid(humanoid);
                 tiles[x][y].getButton().setText(tiles[x][y].toString());
                 tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()].removeHumanoid(humanoid);
                 tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()].getButton().setText("   ");
+                humanoid.setXCoordinate(x);
+                humanoid.setYCoordinate(y);
+            }
             }
             if (attempts == 8) foundMove = true;
         }

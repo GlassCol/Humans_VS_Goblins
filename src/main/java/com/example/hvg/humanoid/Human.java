@@ -160,6 +160,16 @@ public class Human implements Humanoid {
         equipment.add(drop);
     }
 
+    @Override
+    public void setXCoordinate(int x) {
+        this.xCoordinate = x;
+    }
+
+    @Override
+    public void setYCoordinate(int y) {
+        this.yCoordinate = y;
+    }
+
     /**
      * Returns all characteristics of this human in a string
      *
