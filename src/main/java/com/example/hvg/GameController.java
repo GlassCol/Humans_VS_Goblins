@@ -22,6 +22,7 @@ public class GameController {
     private Tile currentTile;
     private Initializer initializer = new Initializer();
     private Settings settings = Settings.getSettings();
+    private Boolean paused = true;
     private ArrayList<ArrayList<Humanoid>> humanoidArrayList = new ArrayList<>();
     private Tile[][] tiles = new Tile[settings.getBoardSize()][settings.getBoardSize()];
     @FXML
@@ -52,14 +53,24 @@ public class GameController {
         }
     };
 
+    /**
+     * Handles the starting/stopping of the ai only game mode
+     */
     public void handleStartClick() {
-        while(humanoidArrayList.size() > 1) {
-           for (ArrayList<Humanoid> humanoidArrayList : humanoidArrayList) {
-               for (Humanoid humanoid : humanoidArrayList) {
-                   moveAi(humanoid);
-               }
-           }
-              doCombat();
+        if (paused == true) {
+            paused = false;
+            while (humanoidArrayList.get(0).size() > 1 && humanoidArrayList.get(1).size() > 1) {
+                for (ArrayList<Humanoid> humanoidArrayList : humanoidArrayList) {
+                    for (Humanoid humanoid : humanoidArrayList) {
+                        moveAi(humanoid);
+                    }
+                }
+                doCombat();
+            }
+            paused = true;
+        }
+        else {
+            paused = false;
         }
     }
     @FXML
@@ -88,13 +99,25 @@ public class GameController {
      * resets the game board upon pressing of the reset button
      */
     public void reInitialize() throws IOException {
-        Stage stage = (Stage) reset_button.getScene().getWindow();
-        stage.close();
-        Stage mainStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-view.fxml")));
-        mainStage.setTitle("Humans VS Goblins");
-        mainStage.setScene(new Scene(root, 600, 400));
-        mainStage.show();
+        paused = true;
+        if(!settings.isAiGame()) {
+            Stage stage = (Stage) reset_button.getScene().getWindow();
+            stage.close();
+            Stage mainStage = new Stage();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("game-view.fxml")));
+            mainStage.setTitle("Humans VS Goblins");
+            mainStage.setScene(new Scene(root, 600, 400));
+            mainStage.show();
+        }
+        else {
+            Stage stage = (Stage) reset_button.getScene().getWindow();
+            stage.close();
+            Stage mainStage = new Stage();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ai-game-view.fxml")));
+            mainStage.setTitle("Humans VS Goblins");
+            mainStage.setScene(new Scene(root, 600, 400));
+            mainStage.show();
+        }
     }
 
     /**
@@ -243,6 +266,9 @@ public class GameController {
                 tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()].getButton().setText("   ");
                 humanoid.setXCoordinate(x);
                 humanoid.setYCoordinate(y);
+                if(tiles[x][y].hasCombat()) {text_area.setText("Combat has broken out! + \n\n" + text_area.getText());}
+                text_area.setText(humanoid.getName() + " moved to tile [" + (x + 1) + "][" + (y + 1) + "]\n\n"
+                        + text_area.getText());
             }
             }
             if (attempts == 8) foundMove = true;

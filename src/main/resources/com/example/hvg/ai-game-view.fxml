@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane id="split_pane" dividerPositions="0.65" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="400" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hvg.GameController">
+    <items>
+        <GridPane fx:id="grid_pane" gridLinesVisible="false">
+        </GridPane>
+        <AnchorPane id="bottom_pane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+            <children>
+                <Button id="reset_button" fx:id="reset_button" layoutX="518.0" layoutY="14.0" mnemonicParsing="false" onAction="#reInitialize" prefHeight="25.0" prefWidth="66.0" text="Reset" />
+                <Button id="menu_button" fx:id="menu_button" layoutX="518.0" layoutY="97.0" mnemonicParsing="false" onAction="#backToMain" prefHeight="25.0" prefWidth="66.0" text="Menu" />
+                <TextArea id="text_area" fx:id="text_area" layoutX="14.0" layoutY="6.0" prefHeight="122.0" prefWidth="490.0" />
+                <Button id="play_pause_button" fx:id="play_pause_button" layoutX="518.0" layoutY="56.0" mnemonicParsing="false" onAction="#handleStartClick" prefHeight="25.0" prefWidth="66.0" text="Play" />
+            </children></AnchorPane>
+    </items>
+</SplitPane>
