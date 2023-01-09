@@ -13,16 +13,14 @@ import java.util.Random;
  */
 public class Human implements Humanoid {
     private final int startingHP;
-    private int strength;
-    private String name;
-    private String color;
+    private final int strength;
+    private final String name;
+    private final String color;
     private int health;
     private int xCoordinate, yCoordinate;
     private Equipment[] equippedEquipment = new Equipment[3];
     private ArrayList<Equipment> equipment = new ArrayList<>();
-    private Equipment emptySpace = new EmptySlotSpace();
-
-    private boolean hasDoneAction = false;
+    private final Equipment emptySpace = new EmptySlotSpace();
 
     public Human(int strength, String name, String color, int startingHP
             , int xCoordinate, int yCoordinate) {

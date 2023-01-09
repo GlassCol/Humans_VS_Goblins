@@ -20,7 +20,7 @@ public class MainController {
     @FXML
     private Button settings_button;
 
-    private Settings settings = Settings.getSettings();
+    private final Settings settings = Settings.getSettings();
 
     @FXML
     public void onExitButtonClick() {

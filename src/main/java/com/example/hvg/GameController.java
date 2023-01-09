@@ -16,12 +16,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class GameController {
     private Tile currentTile;
-    private Initializer initializer = new Initializer();
-    private Settings settings = Settings.getSettings();
+    private final Initializer initializer = new Initializer();
+    private final Settings settings = Settings.getSettings();
     private Boolean paused = true;
     private ArrayList<ArrayList<Humanoid>> humanoidArrayList = new ArrayList<>();
     private Tile[][] tiles = new Tile[settings.getBoardSize()][settings.getBoardSize()];
@@ -36,7 +35,7 @@ public class GameController {
         public void handle(ActionEvent actionEvent) {
             if (currentTile == null) {
                 currentTile = findTile(actionEvent);
-                text_area.setText((currentTile.printAllHumanoids() + "\n" + text_area.getText()));
+                text_area.insertText(0, currentTile.printAllHumanoids() + "\n");
             } else {
                 if (isValidMove(findTile(actionEvent))) {
                     findTile(actionEvent).placeHumanoid(currentTile.getHuman());
@@ -46,7 +45,10 @@ public class GameController {
                         moveAi(humanoidArrayList.get(1).get(new Random().nextInt(humanoidArrayList.get(1).size() - 1)));
                     doCombat();
                 } else {
-                    text_area.setText("Invalid Move" + "\n\n" + text_area.getText());
+                    text_area.insertText(0, """
+                            Invalid Move
+
+                            """);
                 }
                 currentTile = null;
             }
@@ -57,9 +59,9 @@ public class GameController {
      * Handles the starting/stopping of the ai only game mode
      */
     public void handleStartClick() {
-        if (paused == true) {
+        if (paused) {
             paused = false;
-            while (humanoidArrayList.get(0).size() > 1 && humanoidArrayList.get(1).size() > 1) {
+            while (humanoidArrayList.get(0).size() >= 1 && humanoidArrayList.get(1).size() >= 1) {
                 for (ArrayList<Humanoid> humanoidArrayList : humanoidArrayList) {
                     for (Humanoid humanoid : humanoidArrayList) {
                         moveAi(humanoid);
@@ -136,7 +138,6 @@ public class GameController {
     /**
      * Finds the tile which was pressed by the user
      *
-     * @param actionEvent
      * @return tile : Tile
      */
     public Tile findTile(ActionEvent actionEvent) {
@@ -195,19 +196,10 @@ public class GameController {
             }
         }
         if (humanoidArrayList.get(0).size() == 0 || humanoidArrayList.get(1).size() == 0)
-            text_area.setText("GAME OVER" + "\n\n" + text_area.getText());
-    }
+            text_area.insertText(0, """
+                    GAME OVER
 
-    /**
-     * Moves all Humanoids Passed to it
-     * then resets currentTile to null
-     * @param humanoids : List of Humanoids to move
-     */
-    public void moveHumanoids(ArrayList<Humanoid> humanoids){
-        for (Humanoid humanoid :humanoids) {
-            moveAi(humanoid);
-        }
-        currentTile = null;
+                    """);
     }
 
     /**
@@ -221,40 +213,32 @@ public class GameController {
         int attempts = 0;
         //returns without going in to the loop if the humanoid is in combat
         if(currentTile.hasCombat()) return;
-        while (foundMove == false) {
+        while (!foundMove) {
             int x = humanoid.getXCoordinate();
             int y = humanoid.getYCoordinate();
             int move = new Random().nextInt(8);
 
             switch (move) {
-                case 0:
+                case 0 -> {
                     x++;
                     y++;
-                    break;
-                case 1:
-                    x++;
-                    break;
-                case 2:
+                }
+                case 1 -> x++;
+                case 2 -> {
                     x++;
                     y--;
-                    break;
-                case 3:
-                    y++;
-                    break;
-                case 4:
-                    y--;
-                    break;
-                case 5:
+                }
+                case 3 -> y++;
+                case 4 -> y--;
+                case 5 -> {
                     x--;
                     y++;
-                    break;
-                case 6:
-                    x--;
-                    break;
-                case 7:
+                }
+                case 6 -> x--;
+                case 7 -> {
                     x--;
                     y--;
-                    break;
+                }
             }
             attempts++;
             if(x >= 0 && x < settings.getBoardSize() - 1 && y >= 0 && y < settings.getBoardSize() - 1){
@@ -266,12 +250,15 @@ public class GameController {
                 tiles[humanoid.getXCoordinate()][humanoid.getYCoordinate()].getButton().setText("   ");
                 humanoid.setXCoordinate(x);
                 humanoid.setYCoordinate(y);
-                if(tiles[x][y].hasCombat()) {text_area.setText("Combat has broken out! + \n\n" + text_area.getText());}
-                text_area.setText(humanoid.getName() + " moved to tile [" + (x + 1) + "][" + (y + 1) + "]\n\n"
-                        + text_area.getText());
+                if(tiles[x][y].hasCombat()) {text_area.insertText(0, "Combat has broken out!\n\n");}
+                text_area.insertText(0, humanoid.getName() + " moved to tile [" + (x + 1) + "][" + (y + 1) + "]"
+                        + "\n\n");
             }
             }
-            if (attempts == 8) foundMove = true;
+            if (attempts == 8) {
+                text_area.insertText(0, humanoid.getName() + " could not find a valid move\n\n");
+                foundMove = true;
+            }
         }
     }
 
