@@ -998,6 +998,7 @@ Bartlett
 Kidd
 Acevedo
 Mullen
-RERUN
-OPTIONS
-SHARE
+Mccormick
+Hutchinson
+Hess
+Dorsey
